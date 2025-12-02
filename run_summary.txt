@@ -1,0 +1,29 @@
+Fraud Pattern Generator – Run Summary
+samples=2000, fraud_ratio=0.15, seed=42
+
+Cross-validation (5-fold):
+  accuracy_mean=0.9990, accuracy_std=0.0012
+  precision_mean=1.0000, precision_std=0.0000
+  recall_mean=0.9933, recall_std=0.0082
+
+Hold-out test metrics:
+  accuracy=1.0000
+  precision=1.0000
+  recall=1.0000
+
+Confusion matrix:
+[[510   0]
+ [  0  90]]
+
+Classification report:
+              precision    recall  f1-score   support
+
+           0      1.000     1.000     1.000       510
+           1      1.000     1.000     1.000        90
+
+    accuracy                          1.000       600
+   macro avg      1.000     1.000     1.000       600
+weighted avg      1.000     1.000     1.000       600
+
+
+Note: IsolationForest anomaly detection was used to rank transactions by anomaly_score.
