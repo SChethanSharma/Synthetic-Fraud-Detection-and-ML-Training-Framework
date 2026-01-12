@@ -1,0 +1,103 @@
+Running cd /workspaces/fraud_pattern_project && python main.py --samples 2000 --fraud_ratio 0.15 --seed 42
+Results in:
+
+════════════════════════════════ Fraud Pattern Generator – Full System ════════════════════════════════
+samples=2000, fraud_ratio=0.15, seed=42
+═════════════════════════════════ STEP 1: Generate Synthetic Data ════════════════════════════════════
+Generating data... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00
+      Dataset Summary      
+╔═════════════════╤═══════╗
+║ Metric          │ Value ║
+╟─────────────────┼───────╢
+║ Total Rows      │  2000 ║
+║ Fraud Count     │   300 ║
+║ Non-Fraud Count │  1700 ║
+║ Fraud Ratio     │  0.15 ║
+╚═════════════════╧═══════╝
+──────────────────────────────────── STEP 2: Correlation Analysis ─────────────────────────────────────
+──────────────────────────────────── STEP 3: Cross-Validation ───────────────────────────────────────
+CV Accuracy mean: 0.995
+CV Recall   mean: 0.987
+─────────────────────── STEP 4: Hyperparameter Tuning (RandomForest) ──────────────────────────────
+/home/codespace/.local/lib/python3.12/site-packages/sklearn/model_selection/_validation.py:490: FitFailedWarning:
+The score on these train-test partitions for these parameters will be set to nan.
+If these failures are not expected, you can try to debug them by setting error_score='raise'.
+
+Below are more details about the failures:
+────────────────────────────────────────────────────────────────────────────────────────────────────
+12 fits failed with the following error:
+Traceback (most recent call last):
+  File "/home/codespace/.local/lib/python3.12/site-packages/sklearn/model_selection/_validation.py",
+ line 833, in _fit_and_score
+    estimator.fit(X_train, y_train, **fit_params)
+  File "/home/codespace/.local/lib/python3.12/site-packages/sklearn/base.py", line 1329, in wrapper
+    estimator._validate_params()
+  File "/home/codespace/.local/lib/python3.12/site-packages/sklearn/base.py", line 492, in _validate_params
+    validate_parameter_constraints(
+  File "/home/codespace/.local/lib/python3.12/site-packages/sklearn/utils/_param_validation.py", line 98,
+in validate_parameter_constraints
+    raise InvalidParameterError(
+sklearn.utils._param_validation.InvalidParameterError: The 'max_features' parameter of RandomForestClassifier
+must be an int in the range [1, inf), a float in the range (0.0, 1.0], a str among {'log2', 'sqrt'} or None.
+Got 'auto' instead.
+  warnings.warn(some_fits_failed_some_estimator warning)
+
+Best RF params: {'n_estimators': 300, 'min_samples_split': 5, 'max_features': 0.5, 'max_depth': 10}
+───────────────────────────────────── STEP 5: Model Comparison ──────────────────────────────────────
+                   Model Comparison                   
+                                                      
+  Model                Accuracy   Precision   Recall  
+ ──────────────────────────────────────────────────── 
+  LogisticRegression      0.990       0.967    0.967  
+  RandomForest            0.990       0.967    0.967  
+  GradientBoosting        0.992       0.967    0.978  
+                                                      
+Best model by recall: GradientBoosting
+─────────────────────────── STEP 6: Evaluate Tuned RandomForest ──────────────────────────────────
+Tuned RF Accuracy: 0.990
+Tuned RF Precision: 0.967
+Tuned RF Recall: 0.967
+Confusion Matrix:
+[[507   3]
+ [  3  87]]
+Classification Report:
+              precision    recall  f1-score   support
+
+           0      0.994     0.994     0.994       510
+           1      0.967     0.967     0.967        90
+
+    accuracy                          0.990       600
+   macro avg      0.980     0.980     0.980       600
+weighted avg      0.990     0.990     0.990       600
+
+──── STEP 7: Unsupervised Anomaly Detection (IsolationForest) ───────────────────────────────────────
+     🚨 Top 10 Fraud Alerts (IsolationForest) 🚨      
+╭─────────┬──────┬──────┬────────────┬───────────────╮
+│ Amount  │ Hour │ Intl │ True Fraud │ Anomaly Score │
+├─────────┼──────┼──────┼────────────┼───────────────┤
+│ 4655.46 │ 2    │ 1    │ 1          │ 0.117         │
+│ 2894.92 │ 1    │ 1    │ 1          │ 0.113         │
+│ 3781.85 │ 0    │ 1    │ 1          │ 0.112         │
+│ 3415.50 │ 0    │ 1    │ 1          │ 0.111         │
+│ 5058.29 │ 5    │ 1    │ 1          │ 0.103         │
+│ 2861.94 │ 2    │ 1    │ 1          │ 0.102         │
+│ 4933.46 │ 1    │ 1    │ 1          │ 0.102         │
+│ 2554.40 │ 3    │ 1    │ 1          │ 0.100         │
+│ nan     │ 1    │ 1    │ 1          │ 0.100         │
+│ 3012.82 │ 2    │ 1    │ 1          │ 0.099         │
+╰─────────┴──────┴──────┴────────────┴───────────────╯
+──────────────────────────── Real-Time Fraud Simulation ───────────────────────────────────────────
+Tx amount=870.38, hour=16, intl=0 -> fraud_prob=0.00 (LOW RISK)
+Tx amount=354.98, hour=21, intl=0 -> fraud_prob=0.00 (LOW RISK)
+Tx amount=698.32, hour=11, intl=0 -> fraud_prob=0.00 (LOW RISK)
+Tx amount=3150.50, hour=10, intl=1 -> fraud_prob=1.00 (HIGH RISK)
+Tx amount=385.67, hour=22, intl=0 -> fraud_prob=0.00 (LOW RISK)
+Tx amount=14401.15, hour=15, intl=1 -> fraud_prob=1.00 (HIGH RISK)
+Tx amount=87.58, hour=8, intl=0 -> fraud_prob=0.00 (LOW RISK)
+Tx amount=562.77, hour=13, intl=0 -> fraud_prob=0.00 (LOW RISK)
+Tx amount=3186.45, hour=8, intl=1 -> fraud_prob=1.00 (HIGH RISK)
+Tx amount=517.72, hour=16, intl=0 -> fraud_prob=0.00 (LOW RISK)
+────────────────────────────────── STEP 9: Generating PDF Report ───────────────────────────────────
+PDF report saved as fraud_report.pdf
+──────────────────────────────────────── ✔ FULL RUN COMPLETE ────────────────────────────────────────
+All modules executed successfully.
